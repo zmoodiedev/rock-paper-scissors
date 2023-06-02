@@ -2,58 +2,67 @@ function game() {
 
     let playerScore = 0;
     let computerScore = 0;
+    let computerSelection;
+    let playerSelection;
 
-    console.log("Player Score: " + playerScore);
+    console.log("Your Score: " + playerScore);
     console.log("Computer Score: " + computerScore);
+
+    //Get player input
+    function getPlayerChoice() {
+        playerSelection = prompt("Rock, Paper, or Scissors?").toLowerCase();
+
+        while (playerSelection !== 'rock' && playerSelection !== 'paper' && playerSelection !== 'scissors'){
+            playerSelection = prompt('That\'s not an option. Rock, Paper, or Scissors?').toLowerCase();
+        }
+
+        console.log(playerSelection);
+    }
+
+    //Calculate computer random choice
+    function getComputerChoice() {
+                
+        let randomNum = Math.floor((Math.random() * 3) + 1);
+    
+        if (randomNum === 1) {
+            computerSelection = "rock";
+        } else if (randomNum === 2) {
+            computerSelection = "paper";
+        } else {
+            computerSelection = "scissors";
+        }
+    
+        console.log('Computer chooses ' + computerSelection + ('.'));
+        return(computerSelection);
+    }
 
     function playerWin() {
         console.log("You win!")
         playerScore += 1;
+        console.log(("The score is now ") + playerScore + (" points for you, ") + computerScore + (" points for the computer."));
     }
 
     function computerWin() {
         console.log("You Lose!")
         computerScore += 1;
+        console.log(("The score is now ") + playerScore + (" points for you, ") + computerScore + (" points for the computer."));
     }
 
-    function tieGame() {
-        console.log("It's a tie!")
+    function tieRound() {
+        console.log("It's a tie! Try again!")
     }
 
-
-    function playRound() {
-
-        let playerSelection = prompt("Rock, Paper, or Scissors?").toLowerCase();
-
-        console.log("Player chooses " + playerSelection + ".");
-
-        let computerSelection;
-
-        function getComputerChoice() {
-            
-            let randomNum = Math.floor((Math.random() * 3) + 1);
-        
-            if (randomNum === 1) {
-                computerSelection = "rock";
-            } else if (randomNum === 2) {
-                computerSelection = "paper";
-            } else {
-                computerSelection = "scissors";
-            }
-        
-            return(computerSelection);
-        }
-
-        console.log("Computer chooses " + getComputerChoice() + ".");
+    //Calculate winner of each round
+    function chooseWinner() {
 
         if (computerSelection === "rock") {
     
             if (playerSelection === "rock") {
-               return(tieText);
+                tieRound();;
             } else if (playerSelection === "paper") {
-                return(winningText);
+                playerWin();
             } else {
-                return(losingText);
+                computerWin();
             }
     
         }
@@ -61,11 +70,11 @@ function game() {
         if (computerSelection === "paper") {
     
             if (playerSelection === "rock") {
-                return(losingText);
+                computerWin();
             } else if (playerSelection === "paper") {
-                return(tieText);
+                tieRound();;
             } else {
-                return(winningText);
+                playerWin();
             }
     
         }
@@ -73,28 +82,46 @@ function game() {
         if (computerSelection === "scissors") {
             
             if (playerSelection === "rock") {
-                return(winningText);
+                playerWin();
             } else if (playerSelection === "paper") {
-                return(losingText);
+                computerWin();
             } else {
-                return(tieText);
+                tieRound();;
             }
         }
-
     }
 
-    console.log(playRound());
+    // Set game over items
+    function gameOver() {
+        let winnerScore = Math.max(playerScore, computerScore);
+        let winnerName;
+
+        if (winnerScore === playerScore) {
+            winnerName = "You";
+        } else {
+            winnerName = "Computer";
+        }
+
+        console.log(("Game over. ") +  winnerName + (" win with ") + winnerScore + (" points!"));
+         return;
+    }
+
+    // Limit game to 5 rounds
+    for (let step = 0; step < 5; step++) {
+        
+        function playRound() {
+            getPlayerChoice();
+            getComputerChoice();
+            chooseWinner();
+        }
+
+        playRound();
+    }
+
+    //Begin end sequence of game
+    gameOver();
 
 }
 
+//Initialize game
 game();
-
-/* SUDO:
-Game needs to have 5 rounds.
-    Call the playRound function 5 times.
-    increase score of winner at end of each round
-Need to keep score of both players as games progress.
-    Need variable for each player score
-
-Report a winner at the end.
-*/
